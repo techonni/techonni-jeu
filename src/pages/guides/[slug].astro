@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const guides = (await getCollection("guides")).sort((a, b) => a.data.order - b.data.order);
+  return guides.map((guide, i) => ({
+    params: { slug: guide.id },
+    props: { guide, related: [guides[i + 1], guides[i + 2], guides[i - 1]].filter(Boolean).slice(0, 3) },
+  }));
+}
+
+const { guide, related } = Astro.props;
+const { Content } = await render(guide);
+const updated = guide.data.updated.toLocaleDateString("fr-FR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: guide.data.title,
+  description: guide.data.description,
+  dateModified: guide.data.updated.toISOString(),
+  inLanguage: "fr",
+  publisher: { "@type": "Organization", name: "Techonni" },
+};
+---
+
+<Base title={`${guide.data.title} · Techonni`} description={guide.data.description}>
+  <article>
+    <h1>{guide.data.title}</h1>
+    <p class="meta">Mis à jour le {updated}</p>
+    <Content />
+    <div class="sources">
+      <strong>Sources</strong>
+      <ul>
+        {
+          guide.data.sources.map((s) => (
+            <li>
+              <a href={s.url} rel="nofollow noopener" target="_blank">
+                {s.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </article>
+  <div class="related">
+    <h2>À lire aussi</h2>
+    <ul class="guide-list">
+      {
+        related.map((g) => (
+          <li>
+            <a href={`/guides/${g.id}/`}>
+              <span class="t">{g.data.title}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Base>

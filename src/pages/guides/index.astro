@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+const guides = (await getCollection("guides")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Tous les guides GTA 6 · Techonni"
+  description="La liste de tous les guides GTA 6 de Techonni : sortie, prix, précommande, carte, personnages, PC et consoles."
+>
+  <h1>Tous les guides GTA 6</h1>
+  <p class="lead">{guides.length} guides, mis à jour avant la sortie du 19 novembre 2026.</p>
+  <ul class="guide-list">
+    {
+      guides.map((g) => (
+        <li>
+          <a href={`/guides/${g.id}/`}>
+            <span class="t">{g.data.title}</span>
+            <span class="d">{g.data.description}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

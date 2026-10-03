@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Techonni" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="fr_FR" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="logo" href="/">Techonni<span>.</span></a>
+        <nav>
+          <a href="/guides/">Guides GTA 6</a>
+          <a href="/a-propos/">À propos</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          Techonni est un site de fans indépendant. Il n'est ni affilié ni approuvé par
+          Rockstar Games ou Take-Two Interactive. « Grand Theft Auto » et « GTA » sont des
+          marques de Take-Two Interactive.
+        </p>
+        <p>
+          <a href="/a-propos/">À propos</a> · <a href="/mentions-legales/">Mentions légales</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

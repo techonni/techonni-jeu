@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+
+const guides = (await getCollection("guides")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Techonni · Guides GTA 6 en français"
+  description="Date de sortie, prix, carte de Leonida, personnages, PC : tout ce qui est confirmé sur GTA 6, expliqué simplement en français, avec les sources."
+>
+  <h1>GTA 6 : les guides clairs, en français</h1>
+  <p class="lead">
+    Ce qui est confirmé, ce qui ne l'est pas, et comment se préparer. Chaque guide cite ses
+    sources et indique sa date de mise à jour.
+  </p>
+
+  <div class="countdown">
+    Sortie de GTA 6 sur PS5 et Xbox Series X|S : le 19 novembre 2026
+    <strong id="days">Bientôt</strong>
+  </div>
+
+  <h2>Tous les guides</h2>
+  <ul class="guide-list">
+    {
+      guides.map((g) => (
+        <li>
+          <a href={`/guides/${g.id}/`}>
+            <span class="t">{g.data.title}</span>
+            <span class="d">{g.data.description}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <script>
+    const el = document.getElementById("days");
+    const release = Date.UTC(2026, 10, 19);
+    const days = Math.ceil((release - Date.now()) / 86400000);
+    if (el) {
+      if (days > 1) el.textContent = `J-${days}`;
+      else if (days === 1) el.textContent = "Demain !";
+      else if (days === 0) el.textContent = "C'est aujourd'hui !";
+      else el.textContent = "Le jeu est sorti";
+    }
+  </script>
+</Base>
