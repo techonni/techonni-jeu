@@ -28,28 +28,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap header-inner">
-        <a class="logo" href="/">Techonni<span>.</span></a>
+      <div class="header-inner">
+        <a class="logo" href="/">Techonni</a>
         <nav>
           <a href="/guides/">Guides GTA 6</a>
           <a href="/a-propos/">À propos</a>
         </nav>
       </div>
     </header>
-    <main class="wrap">
-      <slot />
-    </main>
-    <footer class="site-footer">
-      <div class="wrap">
+    <div class="wrap">
+      <main>
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <nav class="chips">
+          <a href="/guides/">Guides GTA 6</a>
+          <a href="/a-propos/">À propos</a>
+          <a href="/mentions-legales/">Mentions légales</a>
+        </nav>
         <p>
           Techonni est un site de fans indépendant. Il n'est ni affilié ni approuvé par
           Rockstar Games ou Take-Two Interactive. « Grand Theft Auto » et « GTA » sont des
           marques de Take-Two Interactive.
         </p>
-        <p>
-          <a href="/a-propos/">À propos</a> · <a href="/mentions-legales/">Mentions légales</a>
-        </p>
-      </div>
-    </footer>
+        <p>© {new Date().getFullYear()} Techonni.</p>
+      </footer>
+    </div>
   </body>
 </html>

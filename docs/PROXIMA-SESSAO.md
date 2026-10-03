@@ -16,6 +16,9 @@ Data: 03/10/2026 (1.ª sessão).
 - [x] Google Search Console (feito pelo Cowork; ver daqui a uns dias se o sitemap foi aceite): adicionar techonni.com e enviar `https://techonni.com/sitemap.xml`.
 - [ ] (Opcional) Criar uma propriedade GA4 para techonni.com e dar o ID `G-...` ao Claude.
 
+## Tema (03/10/2026)
+- O site passou a usar o **mesmo tema do zunrel.com**: fundo claro, letra Geist, coluna estreita, links com «→». Só mudou o estilo (`src/styles/global.css` e `src/layouts/Base.astro`); os textos dos guias são os mesmos.
+
 ## Próximos passos (Claude Code)
 1. ~~Pôr o site online~~ feito a 03/10.
 2. Adicionar o GA4 quando o Techonni der o ID.
