@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Identidade Dário Pinheiro — design tokens partilhados (v1, 2026-10-04)
+   Inspirado na interface escura da app Grok Bot (iOS).
+   Cores medidas na captura de referência (PIL): fundo da app #141414,
+   cartões #202020, contornos #292929, texto secundário #95959b, texto #ffffff.
+   Usado em: dariopinheiro.com, zunrel.com, game.zunrel.com,
+   pieceworth, techonni.com.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* --- Fundos (do mais escuro ao mais claro) --- */
+  --id-bg: #000000;          /* fundo da página: preto puro */
+  --id-surface-1: #141414;   /* zonas discretas, cabeçalho, rodapé */
+  --id-surface-2: #202020;   /* cartões, bolhas, gaveta (drawer) */
+  --id-surface-3: #292929;   /* hover de cartões, chips, campos em foco */
+
+  /* --- Contornos --- */
+  --id-line: #262626;        /* separadores subtis */
+  --id-line-strong: #3a3a3c; /* contorno de cartões e campos */
+  --id-focus: #ffffff;       /* anel de foco (teclado) */
+
+  /* --- Texto (contraste WCAG medido) --- */
+  --id-text: #ffffff;        /* principal: 21:1 em #000, 16.3:1 em #202020 */
+  --id-text-2: #95959b;      /* secundário: 7.0:1 em #000, 5.5:1 em #202020, 4.9:1 em #292929 */
+  --id-text-3: #808086;      /* terciário/meta: 5.3:1 em #000, 4.7:1 em #141414 (só sobre fundo/superfície 1) */
+
+  /* --- Ação (botões) --- */
+  --id-accent: #ffffff;      /* botão principal branco (como o botão enviar) */
+  --id-on-accent: #000000;   /* texto/ícone sobre botão branco */
+  --id-accent-hover: #e5e5e5;
+  --id-ghost: #202020;       /* botão secundário */
+  --id-ghost-hover: #2c2c2e;
+
+  /* --- Estados --- */
+  --id-success: #30d158;
+  --id-danger: #ff453a;
+  --id-warning: #ffd60a;
+
+  /* --- Cantos arredondados --- */
+  --id-radius-xs: 8px;
+  --id-radius-sm: 12px;
+  --id-radius-md: 16px;
+  --id-radius-lg: 20px;
+  --id-radius-xl: 24px;
+  --id-radius-pill: 9999px;
+
+  /* --- Tipografia --- */
+  --id-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Geist Variable", "Geist", "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --id-font-mono: ui-monospace, "SF Mono", "Geist Mono", Menlo, Consolas, monospace;
+  --id-text-xs: 13px;
+  --id-text-sm: 15px;
+  --id-text-md: 17px;   /* tamanho base iOS */
+  --id-text-lg: 20px;
+  --id-text-xl: 28px;
+  --id-text-2xl: 34px;
+  --id-weight-regular: 400;
+  --id-weight-medium: 500;
+  --id-weight-semibold: 600;
+
+  /* --- Espaçamento (grelha de 4px) --- */
+  --id-space-1: 4px;
+  --id-space-2: 8px;
+  --id-space-3: 12px;
+  --id-space-4: 16px;
+  --id-space-5: 20px;
+  --id-space-6: 24px;
+  --id-space-8: 32px;
+  --id-space-10: 40px;
+  --id-space-12: 48px;
+  --id-space-16: 64px;
+
+  /* --- Sombras e movimento --- */
+  --id-shadow: 0 8px 32px rgb(0 0 0 / 0.6);
+  --id-backdrop: rgb(0 0 0 / 0.6);
+  --id-ease: cubic-bezier(0.32, 0.72, 0, 1); /* curva tipo iOS */
+  --id-dur: 0.3s;
+}
