@@ -44,6 +44,7 @@
   --id-radius-lg: 20px;
   --id-radius-xl: 24px;
   --id-radius-pill: 9999px;
+  --id-radius-field: var(--id-radius-xs); /* campos e botões de formulários (newsletter, pesquisa): quadrado levemente arredondado, 8px */
 
   /* --- Tipografia --- */
   --id-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",

@@ -24,6 +24,8 @@
 html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
+  /* Les ancres ne passent pas sous l'en-tête fixe. */
+  scroll-padding-top: 88px;
 }
 
 body {
@@ -58,8 +60,19 @@ a {
   padding: 0 20px;
 }
 
+/* En-tête fixe en haut (demande de Dário, 04/10/2026) : fond noir, trait fin après défilement. */
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   padding: 24px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.site-header[data-scrolled] {
+  border-bottom-color: var(--hairline);
 }
 
 .header-inner {

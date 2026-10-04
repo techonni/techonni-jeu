@@ -27,7 +27,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:locale" content="fr_FR" />
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header" data-sticky-header>
       <div class="header-inner">
         <a class="logo" href="/">Techonni</a>
         <button
@@ -44,6 +44,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         </button>
       </div>
     </header>
+    <script is:inline>
+      // Cabeçalho fixo: um traço fino em baixo só depois de rolar a página.
+      (function () {
+        var header = document.querySelector("[data-sticky-header]");
+        if (!header) return;
+        var update = function () { header.toggleAttribute("data-scrolled", window.scrollY > 4); };
+        update();
+        window.addEventListener("scroll", update, { passive: true });
+      })();
+    </script>
     <!-- Menu latéral : glisse depuis la droite, sur toute la hauteur, au-dessus de la page assombrie. -->
     <div id="site-menu" class="menu-drawer" hidden data-menu-drawer>
       <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
