@@ -30,57 +30,101 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <header class="site-header">
       <div class="header-inner">
         <a class="logo" href="/">Techonni</a>
-        <div class="site-menu" data-menu>
-          <button
-            type="button"
-            class="menu-button"
-            aria-expanded="false"
-            aria-controls="site-menu"
-            aria-label="Menu"
-            data-menu-button
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-              <path class="icon-open" d="M2.5 4.5h13M2.5 9h13M2.5 13.5h13" />
-              <path class="icon-close" d="M4 4l10 10M14 4L4 14" />
-            </svg>
-          </button>
-          <div id="site-menu" class="menu-panel" hidden data-menu-panel>
-            <nav>
-              <a href="/guides/">Guides GTA 6</a>
-              <a href="/a-propos/">À propos</a>
-            </nav>
-          </div>
-        </div>
+        <button
+          type="button"
+          class="menu-button"
+          aria-expanded="false"
+          aria-controls="site-menu"
+          aria-label="Menu"
+          data-menu-button
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M2.5 4.5h13M2.5 9h13M2.5 13.5h13" />
+          </svg>
+        </button>
       </div>
     </header>
+    <!-- Menu latéral : glisse depuis la droite, sur toute la hauteur, au-dessus de la page assombrie. -->
+    <div id="site-menu" class="menu-drawer" hidden data-menu-drawer>
+      <div class="menu-backdrop" aria-hidden="true" data-menu-backdrop></div>
+      <div class="menu-panel" role="dialog" aria-modal="true" aria-label="Menu" data-menu-panel>
+        <div class="menu-top">
+          <button type="button" class="menu-button" aria-label="Fermer le menu" data-menu-close>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+              <path d="M4 4l10 10M14 4L4 14" />
+            </svg>
+          </button>
+        </div>
+        <nav>
+          <a href="/guides/">Guides GTA 6</a>
+          <a href="/a-propos/">À propos</a>
+        </nav>
+      </div>
+    </div>
     <script>
-      // Menu de l'en-tête : bouton, Échap, clic en dehors, clic sur un lien ou focus qui sort le referment.
-      document.querySelectorAll<HTMLElement>("[data-menu]").forEach((root) => {
-        const button = root.querySelector<HTMLButtonElement>("[data-menu-button]")!;
-        const panel = root.querySelector<HTMLElement>("[data-menu-panel]")!;
+      // Menu latéral : le bouton l'ouvre ; ✕, Échap, clic sur le fond et clic sur un lien le referment.
+      // Le focus entre dans le menu (et y reste) puis revient au bouton ; la page ne défile pas tant qu'il est ouvert.
+      const button = document.querySelector<HTMLButtonElement>("[data-menu-button]");
+      const drawer = document.querySelector<HTMLElement>("[data-menu-drawer]");
+      if (button && drawer) {
+        const panel = drawer.querySelector<HTMLElement>("[data-menu-panel]")!;
+        const closeButton = drawer.querySelector<HTMLButtonElement>("[data-menu-close]")!;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let hideTimer: number | undefined;
         const isOpen = () => button.getAttribute("aria-expanded") === "true";
-        const setOpen = (open: boolean) => {
-          button.setAttribute("aria-expanded", String(open));
-          panel.hidden = !open;
+        const lockScroll = (lock: boolean) => {
+          const root = document.documentElement;
+          if (lock) {
+            const scrollbar = window.innerWidth - root.clientWidth;
+            root.style.overflow = "hidden";
+            if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
+          } else {
+            root.style.overflow = "";
+            document.body.style.paddingRight = "";
+          }
         };
-        button.addEventListener("click", () => setOpen(!isOpen()));
+        const open = () => {
+          window.clearTimeout(hideTimer);
+          drawer.hidden = false;
+          lockScroll(true);
+          void drawer.offsetWidth; // la glissade part de la position fermée
+          drawer.setAttribute("data-open", "");
+          button.setAttribute("aria-expanded", "true");
+          closeButton.focus({ preventScroll: true });
+        };
+        const close = () => {
+          if (!isOpen()) return;
+          drawer.removeAttribute("data-open");
+          button.setAttribute("aria-expanded", "false");
+          lockScroll(false);
+          button.focus({ preventScroll: true });
+          hideTimer = window.setTimeout(() => (drawer.hidden = true), reducedMotion.matches ? 0 : 300);
+        };
+        button.addEventListener("click", () => (isOpen() ? close() : open()));
+        closeButton.addEventListener("click", close);
+        drawer.querySelector("[data-menu-backdrop]")!.addEventListener("click", close);
         panel.addEventListener("click", (event) => {
-          if ((event.target as Element).closest("a")) setOpen(false);
-        });
-        document.addEventListener("click", (event) => {
-          if (isOpen() && !root.contains(event.target as Node)) setOpen(false);
+          if ((event.target as Element).closest("a")) close();
         });
         document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape" && isOpen()) {
-            setOpen(false);
-            button.focus();
+          if (!isOpen()) return;
+          if (event.key === "Escape") {
+            event.preventDefault();
+            close();
+          } else if (event.key === "Tab") {
+            const items = [...panel.querySelectorAll<HTMLElement>("a[href], button")];
+            const first = items[0];
+            const last = items[items.length - 1];
+            if (event.shiftKey && (document.activeElement === first || !panel.contains(document.activeElement))) {
+              event.preventDefault();
+              last.focus();
+            } else if (!event.shiftKey && (document.activeElement === last || !panel.contains(document.activeElement))) {
+              event.preventDefault();
+              first.focus();
+            }
           }
         });
-        root.addEventListener("focusout", (event) => {
-          const next = event.relatedTarget as Node | null;
-          if (next && !root.contains(next)) setOpen(false);
-        });
-      });
+      }
     </script>
     <div class="wrap">
       <main>
